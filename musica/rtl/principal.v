@@ -3,6 +3,7 @@
 
 module principal (
 	input clk,
+	input reset,
 	input [6:0] teclas,
    	output clk_out
 	);

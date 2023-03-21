@@ -1,5 +1,4 @@
 
-
 module divisor_frecuencia(
     input clk,
     input wire signed [31:0] freq,	
@@ -23,7 +22,7 @@ always @(posedge clk) begin
     
     if(cuenta==(N_ciclos))
     begin
-        clk_out = ~ clk_out;
+        clk_out = ~clk_out;
         cuenta = 0;
     end
     else 

@@ -7,9 +7,9 @@ module principal (
 	input [6:0] teclas,
    	output clk_out
 	);
-//frecuencia deseada	
-
-parameter freq_prueba = 10000;
+//frecuencia deseada		
+	
+parameter freq_prueba = 1000;
 wire senal_prueba;
 parameter freq_DO = 1046;
 wire senal_do;
@@ -37,40 +37,47 @@ divisor_frecuencia div_la(.clk(clk), .freq(freq_LA), .clk_out(senal_la));
 divisor_frecuencia div_si(.clk(clk), .freq(freq_SI), .clk_out(senal_si));
 
 
+always @(clk or teclas or reset)
+if(reset == 1'b0)
+begin
+	if(teclas[0]==1'b1)
+	begin
+		 senal_salida <= senal_do;
+	end
+	else if (teclas[1]==1'b1)
+	begin
+		 senal_salida <= senal_re;
+	end
+	else if (teclas[2]==1'b1)
+	begin
+		 senal_salida <= senal_mi;
+	end
+	else if (teclas[3]==1'b1)
+	begin
+		 senal_salida <= senal_fa;
+	end
+	else if (teclas[4]==1'b1)
+	begin
+		 senal_salida <= senal_sol;
+	end
+	else if (teclas[5]==1'b1)
+	begin
+		 senal_salida <= senal_la;
+	end
+	else if (teclas[6]==1'b1)
+	begin
+		 senal_salida <= senal_si;
+	end
+	else
+	begin
+		 senal_salida <= 0;
+	end
+end
+else 
+begin
+ senal_salida <= 0;
+end
 
-always @(clk or teclas)
-if(teclas[0]==1'b1)
-begin
-	 senal_salida <= senal_do;
-end
-else if (teclas[1]==1'b1)
-begin
-	 senal_salida <= senal_re;
-end
-else if (teclas[2]==1'b1)
-begin
-	 senal_salida <= senal_mi;
-end
-else if (teclas[3]==1'b1)
-begin
-	 senal_salida <= senal_fa;
-end
-else if (teclas[4]==1'b1)
-begin
-	 senal_salida <= senal_sol;
-end
-else if (teclas[5]==1'b1)
-begin
-	 senal_salida <= senal_la;
-end
-else if (teclas[6]==1'b1)
-begin
-	 senal_salida <= senal_si;
-end
-else
-begin
-	 senal_salida <= 0;
-end
 assign clk_out	 = senal_salida;
 
 

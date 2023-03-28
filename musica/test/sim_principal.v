@@ -7,64 +7,94 @@ module sim_principal;
 reg s_clk = 0;
 reg s_reset = 0;
 reg [6:0] s_teclas;
+
 //variables de salida
 wire s_clk_out;
-integer i;
-integer f;
-parameter n_indata = 10;
-localparam period = 2000000;  
+
+//archivos
+integer archivo_salida;
 reg [6:0] datos_entrada [(n_indata-1):0];
+reg [25:0]tiempos_prueba [(n_indata-1):0];
 time datos_salida[n_indata:0];
 
+//enteros
+integer i;
+parameter n_indata = 10;
+localparam period = 2000000;  
+
+//variables para tiempo 
+reg [20:0] numero;
+reg frecuencia;
+time time0;
 time time1;
 time time2;
-time s_clk_period;
-
-
+time periodo_senal;
+time n_ciclos;
+time tiempo_extra;
+time tiempo_prueba;
 principal caja_mus(.clk(s_clk),.reset(s_reset),.teclas(s_teclas), .clk_out(s_clk_out));
 
+
+//valores iniciales
 initial begin
   s_clk = 0;
   s_reset = 1'b0;
   s_teclas = 7'b0000000;
   forever #10 s_clk = ~s_clk;
-  end
+end
+  
+ //leer y abrir archivos 
 initial begin
-f = $fopen("./output.txt","w");
+    archivo_salida = $fopen("./output.txt","w");
+    $readmemb("datos_prueba.txt",datos_entrada);
+    $readmemb("tiempos_prueba.txt",tiempos_prueba);
 end
 
 initial begin 
-    $readmemb("datos_prueba.txt",datos_entrada);
-    $fwrite(f,"periodo\n");
+    $fwrite(archivo_salida,"periodo\n");
+    
     for (i = 0; i < n_indata; i = i + 1)
     begin 
-	s_teclas = datos_entrada[i];
-	#(period);
-	if (s_teclas != 7'b0000000)
-	begin
+    s_teclas = datos_entrada[i];
+    //calcular el tiempo   
+    tiempo_prueba = tiempos_prueba[i];
+    if (datos_entrada[i] != 7'b0)
+    begin
+	time0 = $realtime;
 	@(posedge s_clk_out)
-	time1=$realtime;
-
+	time1 = $realtime;
 	@(negedge s_clk_out)
-	time2=$realtime;
-
-	@(posedge s_clk_out)
-	s_clk_period = (time2 - time1)*2;
-	$display(s_clk_period);
-	datos_salida[i] = s_clk_period;
-	$fwrite(f,"%t\n", datos_salida[i]);
-	end
-	else
+	time2 = $realtime;
+	//calculo del periodo
+	periodo_senal = 2*(time2 - time1); 
+	$display(periodo_senal);
+	
+	//calculo del numero de ciclos 
+	if((time2 - time1) != 0)
 	begin
-	$display(0);
-	datos_salida[i] = 0;
-	$fwrite(f,"%t\n", datos_salida[i]);
+	n_ciclos = tiempo_prueba/(2*(time2 - time1)); 
+	$display(n_ciclos);
 	end
-    end    
-    $fclose(f); 
+	tiempo_extra = periodo_senal - (tiempo_prueba - (n_ciclos*periodo_senal));
+	#((tiempo_prueba - (time2 - time0)) + tiempo_extra);
+	$display(tiempo_extra);
+	//escritura del periodo en el archivotxt
+	datos_salida[i] = periodo_senal;
+	$fwrite(archivo_salida,"%t\n", datos_salida[i]);
+    end
+    else
+    begin
+	#(tiempo_prueba);    
+    	$display(0);
+	//escritura del periodo en el archivotxt    	
+    	datos_salida[i] = 0;
+	$fwrite(archivo_salida,"%t\n", datos_salida[i]);
+    end 
+    end   
+    $fclose(archivo_salida); 
     $finish;  
 end 
-
+    	
 
 initial begin: TEST_WAVE
 	

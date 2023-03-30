@@ -50,9 +50,7 @@ initial begin
     $readmemb("tiempos_prueba.txt",tiempos_prueba);
 end
 
-initial begin 
-    $fwrite(archivo_salida,"periodo\n");
-    
+initial begin  
     for (i = 0; i < n_indata; i = i + 1)
     begin 
     s_teclas = datos_entrada[i];

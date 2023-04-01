@@ -8,7 +8,6 @@ module principal (
    	output clk_out
 	);
 //frecuencia deseada
-
 parameter freq_DO = 1046;
 wire senal_do;
 parameter freq_RE = 1174;
@@ -23,7 +22,6 @@ parameter freq_LA = 1760;
 wire senal_la;
 parameter freq_SI = 1975;
 wire senal_si;
-
 
 reg signed [31:0] s_freq = 0;
 wire senal_divisor;
@@ -67,6 +65,10 @@ begin
 	begin
 		s_freq <= 0;			
 	end
+end
+else 
+begin 
+	s_freq <= 0;	
 end
 
 assign clk_out	 = senal_divisor;

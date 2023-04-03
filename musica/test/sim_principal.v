@@ -19,7 +19,7 @@ time datos_salida[n_indata:0];
 
 //enteros
 integer i;
-parameter n_indata = 10;
+parameter n_indata = 100;
 localparam period = 2000000;  
 
 //variables para tiempo 

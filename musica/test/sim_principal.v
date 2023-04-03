@@ -66,16 +66,14 @@ initial begin
 	//calculo del periodo
 	periodo_senal = 2*(time2 - time1); 
 	$display(periodo_senal);
-	
 	//calculo del numero de ciclos 
 	if((time2 - time1) != 0)
 	begin
 	n_ciclos = tiempo_prueba/(2*(time2 - time1)); 
-	$display(n_ciclos);
 	end
 	tiempo_extra = periodo_senal - (tiempo_prueba - (n_ciclos*periodo_senal));
 	#((tiempo_prueba - (time2 - time0)) + tiempo_extra);
-	$display(tiempo_extra);
+
 	//escritura del periodo en el archivotxt
 	datos_salida[i] = periodo_senal;
 	$fwrite(archivo_salida,"%t\n", datos_salida[i]);

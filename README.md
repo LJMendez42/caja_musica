@@ -1,3 +1,12 @@
+
+
+#Musical Box
+
+This project was designed for use by blind people, so the musical notes are written in Braille on the keyboard. The motivation is to provide a tool for blind people to play their melodies and listen to them. This program has as input an array of keys, where each time a key is pressed, its bit changes to one, the simulation also receives the time that this key was pressed since this is a physical input variable. In the physical implementation, the musical notes were written in braille.
+
+
+
+
 # Sobel filter and greatest common divisor
 
 This project encompasses two distinct functionalities.The first functionality is an edge detection filter that utilizes the Sobel algorithm, while the second functionality calculates the greatest common divisor of two positive 8-bit numbers."     
